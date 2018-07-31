@@ -5,16 +5,20 @@
 #include <GLFW/glfw3.h>
 
 
-class triangle2D{
+class triangle{
 public:
-                            triangle2D();
-                            ~triangle2D();
+                            triangle(int);
+                            ~triangle();
 
-    void                    Display(int);
+    void                    Display();
+    void                    setFinalBuffer();
 
 private:
     unsigned int            VAO,VBO;
+    int                     shaderProgram;
     float                   vertexData[9];
+    float                   color[9];
+    float                   finalBuffer[18];
 };
 
 #endif

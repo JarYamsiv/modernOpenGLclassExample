@@ -12,8 +12,8 @@ int initWindow();
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
-extern unsigned int SCR_WIDTH;
-extern unsigned int SCR_HEIGHT;
+// settings
 extern GLFWwindow* window;
+
 
 #endif
