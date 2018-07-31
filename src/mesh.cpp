@@ -12,10 +12,10 @@ mesh::mesh(int sP, const char *fileName)
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertexData.size()*sizeof(vertexData[0]), &vertexData[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexData), indexData, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexData), &indexData[0], GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -33,11 +33,6 @@ mesh::mesh(int sP, const char *fileName)
 
 mesh::~mesh()
 {
-    delete[] finalBuffer;
-    delete[] vertexData;
-    delete[] color;
-    delete[] texCord;
-    delete[] indexData;
     glBindVertexArray(0);
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
@@ -96,33 +91,34 @@ void mesh::loadFromFile(const char* fileName)
     }
     meshFile >> n;
 
-    finalBuffer = new float[n * 6];
-    vertexData  = new float[n * 3];
-    color       = new float[n * 3];
-    texCord     = new float[n * 2];
+    float tempF;
+    unsigned int tempI;
 
     for (i = 0; i < n * 3; i++)
     {
-        meshFile >> vertexData[i];
+        meshFile >> tempF;
+        vertexData.push_back(tempF);
     }
 
     for (i = 0; i < n * 3; i++)
     {
-        meshFile >> color[i];
+        meshFile >> tempF;
+        color.push_back(tempF);
     }
 
     for (i = 0; i < n * 2; i++)
     {
-        meshFile >> texCord[i];
+        meshFile >> tempF;
+        texCord.push_back(tempF);
     }
 
     meshFile >> nIndex;
 
-    indexData = new unsigned int[nIndex];
 
     for (i = 0; i < nIndex; i++)
     {
-        meshFile >> indexData[i];
+        meshFile >> tempI;
+        indexData.push_back(tempI);
     }
 
 }

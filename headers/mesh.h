@@ -6,6 +6,9 @@
 
 #include <fstream>
 #include <iostream>
+#include <vector>
+
+using std::vector;
 
 
 class mesh{
@@ -23,14 +26,14 @@ private:
     int                     shaderProgram;
 
     int                     n;
-    float                   *vertexData;
+    vector<float >          vertexData;
 
     int                     nIndex;
-    unsigned int            *indexData;
+    vector<unsigned int>    indexData;
 
-    float                   *color;
-    float                   *finalBuffer;
-    float                   *texCord;
+    vector<float>           color;
+    vector<float>           finalBuffer;
+    vector<float>           texCord;
 
     float                   tempData[12];
 };
