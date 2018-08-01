@@ -44,7 +44,7 @@ void mesh::Display()
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO); 
     glDrawElements(GL_TRIANGLES, nIndex, GL_UNSIGNED_INT, 0);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    //glDrawArrays(GL_TRIANGLES, 0, 3);
     glBindVertexArray(0);
 }
 

@@ -1,7 +1,7 @@
 #ifndef _MESH_H
 #define _MESH_H
 
-#include "../GLAD/glad.h"
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <fstream>

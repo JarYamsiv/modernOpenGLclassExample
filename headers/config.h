@@ -1,7 +1,7 @@
 #ifndef _CONFIG_H
 #define _CONFIG_H
 
-#include "../GLAD/glad.h"
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include <iostream>

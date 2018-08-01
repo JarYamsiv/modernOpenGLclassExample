@@ -5,7 +5,7 @@ OBJS = objects/main.o objects/triangle.o objects/config.o objects/shaders.o obje
 LIBS = -lGL -lGLU -lglut -lglfw -lGLEW
 
 a.out : ${OBJS}
-	${CC} ${GDB} ${CXXFLAGS} ${OBJS} GLAD/glad.o ${LIBS} -o bin/main.out 
+	${CC} ${GDB} ${CXXFLAGS} ${OBJS} ${LIBS} -o bin/main.out 
 
 objects/main.o: main.cpp
 	${CC} -c main.cpp -o objects/main.o

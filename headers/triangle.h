@@ -1,7 +1,7 @@
 #ifndef _TRIANGLE_H
 #define _TRIANGLE_H
 
-#include "../GLAD/glad.h"
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 
