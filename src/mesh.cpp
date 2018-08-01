@@ -12,13 +12,19 @@ mesh::mesh(int sP, const char *fileName)
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertexData.size()*sizeof(vertexData[0]), &vertexData[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, finalBuffer.size()*sizeof(finalBuffer[0]), &finalBuffer[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexData), &indexData[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexData.size()*sizeof(GLuint), &indexData[0], GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    // color attribute
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+    // texture coord attribute
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
     glBindBuffer(GL_ARRAY_BUFFER, 0); 
@@ -55,25 +61,25 @@ void mesh::setFinalBuffer()
     iV = 0;
     iC = 0;
     iT = 0;
-    while (iP < n*6)
+    while (iP < n*8)
     {
         for (i = 0; i < 3; i++)
         {
-            finalBuffer[iP] = vertexData[iV];
+            finalBuffer.push_back(vertexData[iV]);
             iP++;
             iV++;
         }
 
         for (i = 0; i < 3; i++)
         {
-            finalBuffer[iP] = color[iC];
+            finalBuffer.push_back(color[iC]);
             iP++;
             iC++;
         }
 
         for (i = 0; i < 2; i++)
         {
-            finalBuffer[iP] = texCord[iT];
+            finalBuffer.push_back(texCord[iT]);
             iP++;
             iT++;
         }
@@ -120,5 +126,7 @@ void mesh::loadFromFile(const char* fileName)
         meshFile >> tempI;
         indexData.push_back(tempI);
     }
+
+    setFinalBuffer();
 
 }

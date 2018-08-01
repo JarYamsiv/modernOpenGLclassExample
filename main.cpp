@@ -16,7 +16,7 @@ int main()
     initWindow();
 
     //creating a shader for traingle
-    Shader traingleShader("shaders/vertex/noColor.fs","shaders/fragment/noColor.fs");
+    Shader traingleShader("shaders/vertex/colorTex.fs","shaders/fragment/colorTex.fs");
 
     //traingles should be made and properly deleted using pointers otherwise they'll create segmentation fault
     //triangle *T = new triangle(traingleShader.ID);
