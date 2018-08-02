@@ -64,6 +64,7 @@ int main()
     //traingles should be made and properly deleted using pointers otherwise they'll create segmentation fault
     //triangle *T = new triangle(traingleShader.ID);
     mesh *P = new mesh(traingleTex.tex,traingleShader.ID, "resources/mesh/plane.dat", GL_TRIANGLES);
+    //P->moveTo(glm::vec3(0.0,0.0,0.0));
 
     // render loop
     // -----------
@@ -79,6 +80,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
 
         //T->Display();
+        P->setRotation(0.0,0.0,(float)glfwGetTime());
         P->Display();
 
         glfwSwapBuffers(window);

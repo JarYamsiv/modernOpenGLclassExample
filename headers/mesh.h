@@ -9,10 +9,13 @@
 #include <vector>
 
 #include <glm/glm.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/detail/type_mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 using std::vector;
+
 
 
 class mesh{
@@ -23,6 +26,8 @@ public:
     void                    Display();
     void                    setFinalBuffer();
     void                    moveTo(glm::vec3 newPos);
+    void                    moveTo(float x,float y,float z);
+    void                    setRotation(float rx,float ry,float rz);
 
 private:
     void                    loadFromFile(const char*);
@@ -42,6 +47,10 @@ private:
     vector<float>           texCord;
 
     GLenum                  bMode;//build mode whether it's triangle quads or etc..
+    //glm::mat4x4             transformMatrix;
+    unsigned int            transMatLoc;
+    glm::vec3               position;
+    float                   rotationX,rotationY,rotationZ;
 };
 
 #endif
