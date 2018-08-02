@@ -8,22 +8,28 @@
 #include <iostream>
 #include <vector>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 using std::vector;
 
 
 class mesh{
 public:
-                            mesh(int,const char*);
+                            mesh(unsigned int,int,const char*,GLenum buildMode);
                             ~mesh();
 
     void                    Display();
     void                    setFinalBuffer();
+    void                    moveTo(glm::vec3 newPos);
 
 private:
     void                    loadFromFile(const char*);
 
     unsigned int            VAO,VBO,EBO;
     int                     shaderProgram;
+    unsigned int            texture;
 
     int                     n;
     vector<float >          vertexData;
@@ -35,7 +41,7 @@ private:
     vector<float>           finalBuffer;
     vector<float>           texCord;
 
-    float                   tempData[12];
+    GLenum                  bMode;//build mode whether it's triangle quads or etc..
 };
 
 #endif

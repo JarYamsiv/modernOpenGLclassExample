@@ -1,10 +1,11 @@
 #include "../headers/mesh.h"
 
-mesh::mesh(int sP, const char *fileName)
+mesh::mesh(unsigned int tX,int sP, const char *fileName,GLenum bM)
 {
     loadFromFile(fileName);
-
+    bMode=bM;
     shaderProgram = sP;
+    texture=tX;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
@@ -35,6 +36,9 @@ mesh::mesh(int sP, const char *fileName)
     // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
     glBindVertexArray(0); 
+
+    //transformationMatrix=glm::mat4(1.0f);
+    //transMatLoc=glGetUniformLocation(shaderProgram, "transform");
 }
 
 mesh::~mesh()
@@ -47,9 +51,12 @@ mesh::~mesh()
 
 void mesh::Display()
 {
+    //glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "transform"), 1, GL_FALSE, glm::value_ptr(transformationMatrix));
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO); 
-    glDrawElements(GL_TRIANGLES, nIndex, GL_UNSIGNED_INT, 0);
+    glDrawElements(bMode, nIndex, GL_UNSIGNED_INT, 0);
     //glDrawArrays(GL_TRIANGLES, 0, 3);
     glBindVertexArray(0);
 }
@@ -130,3 +137,5 @@ void mesh::loadFromFile(const char* fileName)
     setFinalBuffer();
 
 }
+
+
