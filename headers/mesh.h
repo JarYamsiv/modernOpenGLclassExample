@@ -47,8 +47,7 @@ private:
     vector<float>           texCord;
 
     GLenum                  bMode;//build mode whether it's triangle quads or etc..
-    //glm::mat4x4             transformMatrix;
-    unsigned int            transMatLoc;
+    unsigned int            modelMatLoc;
     glm::vec3               position;
     float                   rotationX,rotationY,rotationZ;
 };

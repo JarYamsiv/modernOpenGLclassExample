@@ -38,7 +38,7 @@ mesh::mesh(unsigned int tX, int sP, const char *fileName, GLenum bM)
     glBindVertexArray(0);
 
     //*transformMatrix=glm::mat4(1.0f);
-    transMatLoc = glGetUniformLocation(shaderProgram, "transform");
+    modelMatLoc = glGetUniformLocation(shaderProgram, "model");
     position=glm::vec3(0.0,0.0,0.0);
 }
 
@@ -52,19 +52,20 @@ mesh::~mesh()
 
 void mesh::Display()
 {
-    //glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "transform"), 1, GL_FALSE, glm::value_ptr(*transformMatrix));
+    glUseProgram(shaderProgram);
+    
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture);
-    glUseProgram(shaderProgram);
 
-    glm::mat4 transform;
-    transform = glm::translate(transform, position);
+    glm::mat4 model;
+    
+    model = glm::translate(model, position);
 
-    transform = glm::rotate(transform, rotationX, glm::vec3(1.0f, 0.0f, 0.0f));
-    transform = glm::rotate(transform, rotationY, glm::vec3(0.0f, 1.0f, 0.0f));
-    transform = glm::rotate(transform, rotationZ, glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::rotate(model, rotationX, glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, rotationY, glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, rotationZ, glm::vec3(0.0f, 0.0f, 1.0f));
 
-    glUniformMatrix4fv(transMatLoc, 1, GL_FALSE, glm::value_ptr(transform));
+    glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, glm::value_ptr(model));
 
     glBindVertexArray(VAO);
     glDrawElements(bMode, nIndex, GL_UNSIGNED_INT, 0);

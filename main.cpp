@@ -58,13 +58,32 @@ int main()
     initWindow();
 
     //creating a shader for traingle
-    Shader traingleShader("shaders/vertex/colorTex.fs", "shaders/fragment/colorTex.fs");
+    Shader traingleShader("shaders/vertex/colorTex_3d.fs", "shaders/fragment/colorTex.fs");
+    //creating the wall texture
     Texture traingleTex("resources/texture/wall.jpg",traingleShader.ID,0);
     
-    //traingles should be made and properly deleted using pointers otherwise they'll create segmentation fault
     //triangle *T = new triangle(traingleShader.ID);
-    mesh *P = new mesh(traingleTex.tex,traingleShader.ID, "resources/mesh/plane.dat", GL_TRIANGLES);
-    //P->moveTo(glm::vec3(0.0,0.0,0.0));
+    mesh P(traingleTex.tex,traingleShader.ID, "resources/mesh/plane.dat", GL_TRIANGLES);
+
+    //initialising projection and view matrix
+    glm::mat4 projection;
+    unsigned int projMatLoc;
+    glm::mat4 view;
+    unsigned int viewMatLoc;
+
+    //getting the uniform location for projection and veiw matrix from vertex shader
+    projMatLoc = glGetUniformLocation(traingleShader.ID, "projection");
+    viewMatLoc = glGetUniformLocation(traingleShader.ID, "view");
+
+    float screenWidth=800;
+    float screenHeight=600;
+    //setting up projection matrix and uploading it's value to uniform from vertexShader
+    projection = glm::perspective(glm::radians(45.0f), screenWidth / screenHeight, 0.1f, 100.0f);
+    traingleShader.use();
+    glUniformMatrix4fv(projMatLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+    //temporarily setting veiwmatrix
+    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 
     // render loop
     // -----------
@@ -79,9 +98,12 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        traingleShader.use();
+        glUniformMatrix4fv(viewMatLoc, 1, GL_FALSE, glm::value_ptr(view));
+
         //T->Display();
-        P->setRotation(0.0,0.0,(float)glfwGetTime());
-        P->Display();
+        P.setRotation(-10.0,0.0,0.0);
+        P.Display();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -89,7 +111,7 @@ int main()
 
     //deleteing triangle
     //delete T;
-    delete P;
+    //delete P;
     // glfw: terminate, clearing all previously allocated GLFW resources.
     // ------------------------------------------------------------------
 
