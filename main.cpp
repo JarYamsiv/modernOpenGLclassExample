@@ -102,6 +102,7 @@ int main()
 
     // render loop
     // -----------
+    glEnable(GL_DEPTH_TEST);
     while (!glfwWindowShouldClose(window))
     {
         // input
@@ -111,13 +112,13 @@ int main()
         // render
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
         traingleShader.use();
         glUniformMatrix4fv(viewMatLoc, 1, GL_FALSE, glm::value_ptr(view));
 
         //T->Display();
-        P.setRotation(-55.0,0.0,0.0);
+        P.setRotation(-90,0.0,55.0*(float)glfwGetTime());//55.0 almost equal to 180.0/PI convertion from deg to rad
         P.Display();
 
         glfwSwapBuffers(window);

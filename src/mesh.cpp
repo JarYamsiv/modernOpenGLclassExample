@@ -61,9 +61,9 @@ void mesh::Display()
     
     model = glm::translate(model, position);
 
-    model = glm::rotate(model, rotationX, glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::rotate(model, rotationY, glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(model, rotationZ, glm::vec3(0.0f, 0.0f, 1.0f));
+    model = glm::rotate(model, glm::radians(rotationX), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(rotationY), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(rotationZ), glm::vec3(0.0f, 0.0f, 1.0f));
 
     glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, glm::value_ptr(model));
 
