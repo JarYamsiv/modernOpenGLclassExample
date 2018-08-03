@@ -67,7 +67,7 @@ int main()
     Texture traingleTex("resources/texture/wall.jpg",traingleShader.ID,0);
     
     //triangle *T = new triangle(traingleShader.ID);
-    mesh P(traingleTex.tex,traingleShader.ID, "resources/mesh/plane.dat", GL_TRIANGLES);
+    mesh P(traingleTex.tex,traingleShader.ID, "resources/mesh/cube.dat", GL_TRIANGLES);
 
     //initialising projection and view matrix
     glm::mat4 projection;
