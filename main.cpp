@@ -8,6 +8,10 @@
 
 #include <iostream>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "headers/stb_image.h"
 
@@ -78,12 +82,23 @@ int main()
     float screenWidth=800;
     float screenHeight=600;
     //setting up projection matrix and uploading it's value to uniform from vertexShader
+
     projection = glm::perspective(glm::radians(45.0f), screenWidth / screenHeight, 0.1f, 100.0f);
+    //projection = glm::mat4(1.0f);
+    //projection = glm::perspective(glm::radians(45.0f),screenWidth/screenHeight,0.1f,100.0f);
+    projection = glm::mat4(
+        glm::vec4(3.0/4.0, 0.0, 0.0, 0.0),
+        glm::vec4(    0.0, 1.0, 0.0, 0.0),
+        glm::vec4(    0.0, 0.0, 0.5, 0.5),
+        glm::vec4(    0.0, 0.0, 0.0, 1.0)
+    );
+
     traingleShader.use();
     glUniformMatrix4fv(projMatLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
     //temporarily setting veiwmatrix
-    view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    view = glm::translate(view, glm::vec3(0.0f, -0.5f, 0.25f));
+    //view = glm::mat4(1.0f);
 
     // render loop
     // -----------
@@ -102,7 +117,7 @@ int main()
         glUniformMatrix4fv(viewMatLoc, 1, GL_FALSE, glm::value_ptr(view));
 
         //T->Display();
-        P.setRotation(-10.0,0.0,0.0);
+        P.setRotation(-55.0,0.0,0.0);
         P.Display();
 
         glfwSwapBuffers(window);
