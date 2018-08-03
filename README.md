@@ -1,10 +1,10 @@
 # modernOpenGLclassExample
 a simple example on how to implment modern opengl using classes
 
-#running
+# important
   make sure you've glfw3,glew and glm libraies installed
 
-#installing required libraries
+# installing required libraries
   sudo apt-get update
   sudo apt-get install libglfw3
   sudo apt-get install libglfw3-dev
@@ -13,7 +13,7 @@ a simple example on how to implment modern opengl using classes
   
   sudo apt-get install libglm-dev
   
-#running
+# running
   run 'make' in command line
   execute using bin/main.out
   
