@@ -4,7 +4,6 @@
 #include "headers/triangle.h"
 #include "headers/shaders.h"
 #include "headers/mesh.h"
-#include "headers/Camera__.h"
 
 #include <iostream>
 
