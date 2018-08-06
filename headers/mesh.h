@@ -28,6 +28,9 @@ public:
     void                    moveTo(glm::vec3 newPos);
     void                    moveTo(float x,float y,float z);
     void                    setRotation(float rx,float ry,float rz);
+    void                    setRotationWithVec(float angle,glm::vec3 normal);
+
+    void                    multipleRendering();
 
 private:
     void                    loadFromFile(const char*);
@@ -49,7 +52,10 @@ private:
     GLenum                  bMode;//build mode whether it's triangle quads or etc..
     unsigned int            modelMatLoc;
     glm::vec3               position;
-    float                   rotationX,rotationY,rotationZ;
+    float                   rotationX,rotationY,rotationZ,rotationWithVec;
+    glm::vec3               rotationNormal;
+
+
 };
 
 #endif

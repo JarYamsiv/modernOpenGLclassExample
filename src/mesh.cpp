@@ -40,6 +40,9 @@ mesh::mesh(unsigned int tX, int sP, const char *fileName, GLenum bM)
     //*transformMatrix=glm::mat4(1.0f);
     modelMatLoc = glGetUniformLocation(shaderProgram, "model");
     position=glm::vec3(0.0,0.0,0.0);
+
+    rotationWithVec=0;
+    rotationNormal=glm::vec3(1.0,1.0,1.0);
 }
 
 mesh::~mesh()
@@ -65,11 +68,46 @@ void mesh::Display()
     model = glm::rotate(model, glm::radians(rotationY), glm::vec3(0.0f, 1.0f, 0.0f));
     model = glm::rotate(model, glm::radians(rotationZ), glm::vec3(0.0f, 0.0f, 1.0f));
 
+    model = glm::rotate(model,glm::radians(rotationWithVec),rotationNormal);
+
     glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, glm::value_ptr(model));
 
     glBindVertexArray(VAO);
     glDrawElements(bMode, nIndex, GL_UNSIGNED_INT, 0);
     //glDrawArrays(GL_TRIANGLES, 0, 3);
+    glBindVertexArray(0);
+}
+
+void mesh::multipleRendering()
+{
+    glUseProgram(shaderProgram);
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture);
+
+    glm::mat4 model;
+    
+    model = glm::translate(model, position);
+
+    model = glm::rotate(model, glm::radians(rotationX), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(rotationY), glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(rotationZ), glm::vec3(0.0f, 0.0f, 1.0f));
+
+    model = glm::rotate(model,glm::radians(rotationWithVec),rotationNormal);
+
+    glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+    glBindVertexArray(VAO);
+    for(int i=0; i<50; i++)
+    {
+        for(int j=0; j<50; j++)
+        {
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, glm::vec3((float)(i-25),0.0,(float)(j-25)));
+            glUniformMatrix4fv(modelMatLoc, 1, GL_FALSE, glm::value_ptr(model));
+            glDrawElements(bMode, nIndex, GL_UNSIGNED_INT, 0);
+        }
+    }
     glBindVertexArray(0);
 }
 
@@ -163,4 +201,10 @@ void mesh::setRotation(float rx,float ry,float rz)
     rotationX=rx;
     rotationY=ry;
     rotationZ=rz;
+}
+
+void mesh::setRotationWithVec(float angle,glm::vec3 normal)
+{
+    rotationWithVec=angle;
+    rotationNormal=normal;
 }
