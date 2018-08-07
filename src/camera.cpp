@@ -6,6 +6,7 @@ Camera::Camera(
     float yaw=-90.0,
     float pitch=0.0)
 {
+    Front = glm::vec3(0.0f, 0.0f, -1.0f);
     Position = position;
     Up = up;
     Yaw = yaw;
@@ -27,11 +28,11 @@ void Camera::ProcessKeyboard(CAM_DIRN direction, float deltaTime)
     if (direction == CAM_BACKWARD)
         Position -= Front * velocity;
     if (direction == CAM_LEFT)
-        Position -= Right * velocity;
+        Position -= glm::normalize(glm::cross(Front, Up)) * velocity;
     if (direction == CAM_RIGHT)
-        Position += Right * velocity;
+        Position += glm::normalize(glm::cross(Front, Up)) * velocity;
 
-    UpdateCameraVectors();
+    //UpdateCameraVectors();
 }
 
 void Camera::UpdateCameraVectors()
@@ -43,8 +44,8 @@ void Camera::UpdateCameraVectors()
         front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
         Front = glm::normalize(front);
         // Also re-calculate the Right and Up vector
-        Right = glm::normalize(glm::cross(Front, WorldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
-        Up    = glm::normalize(glm::cross(Right, Front));
+        //Right = glm::normalize(glm::cross(Front, WorldUp));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
+        //Up    = glm::normalize(glm::cross(Right, Front));
 }
 
 glm::mat4 Camera::getViewMat()

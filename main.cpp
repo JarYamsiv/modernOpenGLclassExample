@@ -1,9 +1,17 @@
+/*
+# MADE BY : JARYAMSIV
+
+
+
+
+*/
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "headers/triangle.h"
 #include "headers/shaders.h"
 #include "headers/mesh.h"
+#include "headers/camera.h"
 
 #include <iostream>
 
@@ -19,13 +27,14 @@ int initWindow();
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 //===========================================END==================================================
 
 //============================================GLOBAL VARIABLES================================
 // settings
 GLFWwindow *window;
-const int SCR_WIDTH = 800;
-const int SCR_HEIGHT = 600;
+const int SCR_WIDTH = 1600;
+const int SCR_HEIGHT = 900;
 
 //game related global variables
 float lastX = SCR_WIDTH / 2.0f;
@@ -38,6 +47,7 @@ float lastFrame = 0.0;
 float currentFrame;
 
 //camera testing
+Camera camera();
 glm::vec3 cameraPos = glm::vec3(0.0, 0.0, 3.0);
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -120,12 +130,6 @@ int main()
     traingleShader.use();
     glUniformMatrix4fv(projMatLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-    //temporarily setting veiwmatrix
-    view = glm::lookAt(glm::vec3(0.0f, 3.0f, 3.0f),
-                       glm::vec3(0.0f, 0.0f, 0.0f),
-                       glm::vec3(0.0f, 1.0f, 0.0f));
-    //view = glm::mat4(1.0f);
-
     // render loop
     // -----------
     glEnable(GL_DEPTH_TEST);
@@ -182,6 +186,9 @@ int initWindow()
     // glfw window creation
     // --------------------
     window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+
+    //fullscreen
+    //window = glfwCreateWindow(SCR_WIDTH,SCR_HEIGHT,"Game",glfwGetPrimaryMonitor(),NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -192,6 +199,8 @@ int initWindow()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    glfwSetKeyCallback(window,key_callback);
 
     glewExperimental = GL_TRUE;
     glewInit();
@@ -208,9 +217,6 @@ void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-
-    if(glfwGetKey(window,GLFW_KEY_SPACE)== GLFW_PRESS)
-        isFPS=!isFPS;
     
     if(isFPS)
     {
@@ -264,4 +270,10 @@ void mouse_callback(GLFWwindow *window, double xpos, double ypos)
     front.y = sin(glm::radians(pitch));
     front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
     cameraFront = glm::normalize(front);
+}
+
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+{
+    if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+        isFPS=!isFPS;
 }
