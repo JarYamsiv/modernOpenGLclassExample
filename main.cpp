@@ -27,7 +27,7 @@ int initWindow();
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 void mouse_callback(GLFWwindow *window, double xpos, double ypos);
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
 //===========================================END==================================================
 
 //============================================GLOBAL VARIABLES================================
@@ -47,13 +47,8 @@ float lastFrame = 0.0;
 float currentFrame;
 
 //camera testing
-Camera camera();
-glm::vec3 cameraPos = glm::vec3(0.0, 0.0, 3.0);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-float pitch = -90.0;
-float yaw = 0.0;
-bool isFPS=false;
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f),glm::vec3(0.0f, 1.0f, 0.0f),-90.0,0.0);
+bool isFPS = false;
 
 //==========================================GLOBAL VARIABLES END=================================
 
@@ -147,13 +142,10 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        view = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
+        view=camera.getViewMat();
         traingleShader.use();
         glUniformMatrix4fv(viewMatLoc, 1, GL_FALSE, glm::value_ptr(view));
 
-        //P.setRotationWithVec(55.0 * (float)glfwGetTime(), glm::vec3(1.0f, 0.3f, 0.5f));
-        //P.setRotation(-55.0,0.0,55.0*(float)glfwGetTime());//55.0 almost equal to 180.0/PI convertion from deg to rad
-        //P.Display();
         P.multipleRendering();
 
         glfwSwapBuffers(window);
@@ -200,7 +192,7 @@ int initWindow()
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    glfwSetKeyCallback(window,key_callback);
+    glfwSetKeyCallback(window, key_callback);
 
     glewExperimental = GL_TRUE;
     glewInit();
@@ -217,8 +209,8 @@ void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
-    
-    if(isFPS)
+
+    if (isFPS)
     {
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
@@ -227,53 +219,38 @@ void processInput(GLFWwindow *window)
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
-    float cameraSpeed = 2.5*deltaTime; // adjust accordingly
+    float cameraSpeed = 2.5 * deltaTime; // adjust accordingly
 
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        cameraPos += cameraSpeed * cameraFront;
+        camera.ProcessKeyboard(CAM_FORWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        cameraPos -= cameraSpeed * cameraFront;
+        camera.ProcessKeyboard(CAM_BACKWARD, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        cameraPos -= glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        camera.ProcessKeyboard(CAM_LEFT, deltaTime);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        cameraPos += glm::normalize(glm::cross(cameraFront, cameraUp)) * cameraSpeed;
+        camera.ProcessKeyboard(CAM_RIGHT, deltaTime);
+
 }
 
 void mouse_callback(GLFWwindow *window, double xpos, double ypos)
 {
-    if(firstMouse)
+    if (firstMouse)
     {
         lastX = xpos;
         lastY = ypos;
         firstMouse = false;
     }
-  
+
     float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; 
+    float yoffset = lastY - ypos;
     lastX = xpos;
     lastY = ypos;
 
-    float sensitivity = 0.05;
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
-
-    yaw   += xoffset;
-    pitch += yoffset;
-
-    if(pitch > 89.0f)
-        pitch = 89.0f;
-    if(pitch < -89.0f)
-        pitch = -89.0f;
-
-    glm::vec3 front;
-    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front.y = sin(glm::radians(pitch));
-    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    cameraFront = glm::normalize(front);
+    camera.ProcessMouseMovement(xoffset, yoffset,true);
 }
 
-void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
-        isFPS=!isFPS;
+        isFPS = !isFPS;
 }
